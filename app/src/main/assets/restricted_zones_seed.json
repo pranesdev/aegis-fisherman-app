@@ -1,0 +1,38 @@
+[
+  {
+    "id": "placeholder_intl_boundary",
+    "name": "PLACEHOLDER - International Maritime Boundary",
+    "type": "INTERNATIONAL_BOUNDARY",
+    "description": "ILLUSTRATIVE ONLY. Replace boundaryPolygon with the exact coordinates already loaded on your ESP32 boat unit (AEGIS doc Section 4) - those are the authoritative, government-sourced boundary points. Do not ship this placeholder to a real device.",
+    "boundaryPolygon": [
+      [9.50, 79.30],
+      [9.20, 79.50],
+      [8.90, 79.70],
+      [8.60, 79.90]
+    ]
+  },
+  {
+    "id": "placeholder_mpa",
+    "name": "PLACEHOLDER - Marine Protected Area",
+    "type": "MARINE_PROTECTED_AREA",
+    "description": "ILLUSTRATIVE ONLY. Example of a no-fishing marine park zone. Replace with the official gazette coordinates for your operating area before real use.",
+    "boundaryPolygon": [
+      [9.05, 79.15],
+      [9.00, 79.25],
+      [8.95, 79.20],
+      [8.98, 79.10]
+    ]
+  },
+  {
+    "id": "placeholder_seasonal_ban",
+    "name": "PLACEHOLDER - Seasonal Fishing Ban Zone",
+    "type": "FISHING_BAN_SEASONAL",
+    "description": "ILLUSTRATIVE ONLY. Many coastal states declare an annual monsoon fishing-ban window (dates vary by state/year - confirm current dates with your state Fisheries Department each season). Replace polygon and update the season text via the sync pack, not by hardcoding.",
+    "boundaryPolygon": [
+      [10.50, 80.00],
+      [10.30, 80.20],
+      [10.10, 80.10],
+      [10.20, 79.90]
+    ]
+  }
+]

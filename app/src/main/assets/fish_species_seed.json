@@ -1,0 +1,82 @@
+[
+  {
+    "id": "seer_fish",
+    "commonName": "Seer fish (King mackerel)",
+    "localName": "Vanjaram",
+    "scientificName": "Scomberomorus commerson",
+    "typicalDepthRangeM": "20-50 m",
+    "season": "Sep - Mar",
+    "notes": "High commercial value, caught mostly by gillnet and trolling.",
+    "isRestrictedOrBanned": false
+  },
+  {
+    "id": "pomfret_silver",
+    "commonName": "Silver pomfret",
+    "localName": "Vella vavval",
+    "scientificName": "Pampus argenteus",
+    "typicalDepthRangeM": "10-40 m",
+    "season": "Oct - Jan",
+    "notes": "Best caught over sandy/muddy sea beds.",
+    "isRestrictedOrBanned": false
+  },
+  {
+    "id": "tuna_yellowfin",
+    "commonName": "Yellowfin tuna",
+    "localName": "Choora",
+    "scientificName": "Thunnus albacares",
+    "typicalDepthRangeM": "0-100 m (surface to mid-water)",
+    "season": "Year-round, peak Dec - Apr",
+    "notes": "Found further offshore, often near current edges.",
+    "isRestrictedOrBanned": false
+  },
+  {
+    "id": "sardine_oil",
+    "commonName": "Indian oil sardine",
+    "localName": "Mathi",
+    "scientificName": "Sardinella longiceps",
+    "typicalDepthRangeM": "5-30 m",
+    "season": "Jun - Sep (monsoon upwelling)",
+    "notes": "Schools near the surface, caught with ring seine/boat seine.",
+    "isRestrictedOrBanned": false
+  },
+  {
+    "id": "shrimp_tiger",
+    "commonName": "Giant tiger prawn",
+    "localName": "Eral",
+    "scientificName": "Penaeus monodon",
+    "typicalDepthRangeM": "10-60 m",
+    "season": "Year-round, peak Aug - Nov",
+    "notes": "Bottom trawl catch; check current mesh-size regulations.",
+    "isRestrictedOrBanned": false
+  },
+  {
+    "id": "shark_generic",
+    "commonName": "Sharks (multiple species)",
+    "localName": "Sura",
+    "scientificName": "Selachimorpha (various)",
+    "typicalDepthRangeM": "Varies by species",
+    "season": "N/A",
+    "notes": "Several species are protected under the Wildlife Protection Act - verify species before landing. Whale sharks are fully protected nationwide.",
+    "isRestrictedOrBanned": true
+  },
+  {
+    "id": "sea_cucumber",
+    "commonName": "Sea cucumber",
+    "localName": "Attai",
+    "scientificName": "Holothuroidea (various)",
+    "typicalDepthRangeM": "5-40 m",
+    "season": "N/A",
+    "notes": "Collection, possession, and trade banned under Indian Wildlife Protection Act Schedule I.",
+    "isRestrictedOrBanned": true
+  },
+  {
+    "id": "turtle_sea",
+    "commonName": "Sea turtles (all species)",
+    "localName": "Aamai",
+    "scientificName": "Cheloniidae / Dermochelyidae",
+    "typicalDepthRangeM": "N/A",
+    "season": "N/A",
+    "notes": "Fully protected. Release immediately and report accidental bycatch per local guidelines.",
+    "isRestrictedOrBanned": true
+  }
+]

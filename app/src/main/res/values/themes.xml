@@ -1,0 +1,8 @@
+<resources>
+    <!-- Base application theme. Compose supplies the real Material3 theme (ui/theme/Theme.kt);
+         this XML theme only needs to exist for the manifest / splash window. -->
+    <style name="Theme.Aegis" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:statusBarColor">#0B3D5C</item>
+        <item name="android:windowBackground">#0B3D5C</item>
+    </style>
+</resources>

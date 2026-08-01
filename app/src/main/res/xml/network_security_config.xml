@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- All shore-sync traffic (weather, map tiles, species/zone data) must be HTTPS.
+         The app has no reason to talk to the network at all while at sea. -->
+    <base-config cleartextTrafficPermitted="false" />
+</network-security-config>

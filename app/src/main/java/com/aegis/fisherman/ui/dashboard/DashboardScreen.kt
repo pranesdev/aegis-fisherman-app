@@ -11,9 +11,18 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bluetooth
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Speed
+import androidx.compose.material.icons.filled.Update
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -23,8 +32,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.size
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aegis.fisherman.data.model.BleConnectionState
 import com.aegis.fisherman.data.model.ZoneStatus
@@ -52,9 +65,16 @@ fun DashboardScreen(viewModel: DashboardViewModel = viewModel()) {
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        Text("AEGIS Dashboard", style = MaterialTheme.typography.headlineMedium)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+        ) {
+            Text("SEA CONDITIONS", style = MaterialTheme.typography.titleLarge, color = com.aegis.fisherman.ui.theme.AegisColors.Foam)
+            ConnectionStatusPill(connectionState)
+        }
 
         ZoneStatusBanner(zone = position?.zone ?: ZoneStatus.UNKNOWN)
 
@@ -65,37 +85,104 @@ fun DashboardScreen(viewModel: DashboardViewModel = viewModel()) {
             StatTile(
                 label = "Speed",
                 value = position?.speedKnots?.let { "%.1f kn".format(it) } ?: "--",
+                icon = Icons.Default.Speed,
                 modifier = Modifier.weight(1f)
             )
             StatTile(
-                label = "Distance to boundary",
+                label = "Boundary Dist",
                 value = position?.distanceToBoundaryMeters?.let { formatDistance(it) } ?: "--",
+                icon = Icons.Default.LocationOn,
                 modifier = Modifier.weight(1f)
             )
         }
 
-        StatTile(
-            label = "Last update from boat unit",
-            value = position?.timestampEpochSec?.let { formatTimestamp(it) } ?: "No data yet",
-            modifier = Modifier.fillMaxWidth()
-        )
+        com.aegis.fisherman.ui.components.GlassCard(modifier = Modifier.fillMaxWidth()) {
+            Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                Icon(Icons.Default.Update, contentDescription = null, tint = com.aegis.fisherman.ui.theme.AegisColors.Foam.copy(alpha = 0.6f))
+                androidx.compose.foundation.layout.Spacer(Modifier.width(8.dp))
+                Text(
+                    text = "LATEST SYNC",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = com.aegis.fisherman.ui.theme.AegisColors.Foam.copy(alpha = 0.6f)
+                )
+            }
+            Text(
+                text = position?.timestampEpochSec?.let { formatTimestamp(it) } ?: "Waiting for signal...",
+                style = MaterialTheme.typography.headlineMedium,
+                color = com.aegis.fisherman.ui.theme.AegisColors.Foam
+            )
+        }
 
-        Text(
-            text = connectionStatusLabel(connectionState),
-            style = MaterialTheme.typography.bodyLarge
-        )
+        com.aegis.fisherman.ui.components.GlassCard(
+            modifier = Modifier.fillMaxWidth(),
+            alpha = 0.1f
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(
+                    text = connectionStatusLabel(connectionState),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = com.aegis.fisherman.ui.theme.AegisColors.Foam
+                )
 
-        when (connectionState) {
-            BleConnectionState.DISCONNECTED, BleConnectionState.FAILED ->
-                Button(onClick = { permissionLauncher.launch(requiredBlePermissions()) }) {
-                    Text("Connect to boat unit")
+                when (connectionState) {
+                    BleConnectionState.DISCONNECTED, BleConnectionState.FAILED ->
+                        Button(
+                            onClick = { permissionLauncher.launch(requiredBlePermissions()) },
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(24.dp)
+                        ) {
+                            Icon(Icons.Default.Bluetooth, contentDescription = null)
+                            androidx.compose.foundation.layout.Spacer(Modifier.width(8.dp))
+                            Text("CONNECT TO BOAT UNIT")
+                        }
+                    BleConnectionState.SCANNING, BleConnectionState.CONNECTING ->
+                        androidx.compose.material3.LinearProgressIndicator(
+                            modifier = Modifier.fillMaxWidth(),
+                            color = com.aegis.fisherman.ui.theme.AegisColors.ZoneSafe
+                        )
+                    BleConnectionState.CONNECTED ->
+                        OutlinedButton(
+                            onClick = { viewModel.disconnectFromBoatUnit() },
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(24.dp),
+                            border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.3f))
+                        ) {
+                            Text("DISCONNECT", color = Color.White)
+                        }
                 }
-            BleConnectionState.SCANNING, BleConnectionState.CONNECTING ->
-                Text("Working...", style = MaterialTheme.typography.bodyLarge)
-            BleConnectionState.CONNECTED ->
-                OutlinedButton(onClick = { viewModel.disconnectFromBoatUnit() }) {
-                    Text("Disconnect")
-                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ConnectionStatusPill(state: BleConnectionState) {
+    val color = when (state) {
+        BleConnectionState.CONNECTED -> com.aegis.fisherman.ui.theme.AegisColors.ZoneSafe
+        BleConnectionState.SCANNING, BleConnectionState.CONNECTING -> com.aegis.fisherman.ui.theme.AegisColors.ZoneWarning
+        else -> com.aegis.fisherman.ui.theme.AegisColors.ZoneDanger
+    }
+    
+    Surface(
+        shape = androidx.compose.foundation.shape.CircleShape,
+        color = Color.White.copy(alpha = 0.1f),
+        border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f))
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+        ) {
+            androidx.compose.foundation.layout.Box(
+                modifier = Modifier
+                    .size(8.dp)
+                    .background(color, androidx.compose.foundation.shape.CircleShape)
+            )
+            androidx.compose.foundation.layout.Spacer(Modifier.width(8.dp))
+            Text(
+                text = state.name,
+                style = MaterialTheme.typography.labelLarge,
+                color = Color.White
+            )
         }
     }
 }

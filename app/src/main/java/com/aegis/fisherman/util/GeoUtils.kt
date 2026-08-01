@@ -39,11 +39,24 @@ object GeoUtils {
     }
 
     /** Serialize a lat/lng polygon (as used by RestrictedZone) to a compact JSON string for Room. */
-    fun polygonToJson(points: List<Pair<Double, Double>>): String = Gson().toJson(points)
+    fun polygonToJson(points: List<Pair<Double, Double>>): String =
+        Gson().toJson(points.map { listOf(it.first, it.second) })
 
     fun polygonFromJson(json: String): List<Pair<Double, Double>> {
         val type = object : TypeToken<List<List<Double>>>() {}.type
-        val raw: List<List<Double>> = Gson().fromJson(json, type) ?: emptyList()
+        val raw: List<List<Double>> = try {
+            Gson().fromJson(json, type)
+        } catch (_: Exception) {
+            // Fallback for the broken [{"first":..., "second":...}] format from previous versions
+            val legacyType = object : TypeToken<List<Map<String, Double>>>() {}.type
+            val legacyRaw: List<Map<String, Double>>? = try {
+                Gson().fromJson(json, legacyType)
+            } catch (_: Exception) {
+                null
+            }
+            legacyRaw?.map { listOf(it["first"] ?: 0.0, it["second"] ?: 0.0) } ?: emptyList()
+        } ?: emptyList()
+
         return raw.map { it[0] to it[1] }
     }
 }

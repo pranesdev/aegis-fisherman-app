@@ -84,7 +84,7 @@ class OfflineDataRepository(
 
     private fun RestrictedZoneEntity.toModel() = RestrictedZone(
         id, name,
-        RestrictedZoneType.valueOf(type),
+        RestrictedZoneType.entries.find { it.name == type } ?: RestrictedZoneType.INTERNATIONAL_BOUNDARY,
         description,
         GeoUtils.polygonFromJson(polygonJson)
     )

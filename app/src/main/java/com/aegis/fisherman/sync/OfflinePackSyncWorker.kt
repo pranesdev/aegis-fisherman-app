@@ -21,7 +21,7 @@ import com.aegis.fisherman.data.repository.WeatherRepository
  */
 class OfflinePackSyncWorker(
     context: Context,
-    params: WorkerParameters
+    params: WorkerParameters,
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {

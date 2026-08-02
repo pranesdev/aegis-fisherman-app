@@ -76,12 +76,12 @@ fun MapScreen(viewModel: MapViewModel = viewModel()) {
             BathymetryRepository.MAX_ZOOM,
             256,
             ".png",
-            arrayOf() // archive-only: no remote base URL, MBTilesFileArchive serves every tile
+            arrayOf(), // archive-only: no remote base URL, MBTilesFileArchive serves every tile
         )
         val archiveProvider = MapTileFileArchiveProvider(
             SimpleRegisterReceiver(context),
             bathymetryTileSource,
-            arrayOf(archive)
+            arrayOf(archive),
         )
         val bathymetryTileProvider = MapTileProviderArray(bathymetryTileSource, null, arrayOf(archiveProvider))
         val bathymetryOverlay = TilesOverlay(bathymetryTileProvider, context).apply {
@@ -113,17 +113,17 @@ fun MapScreen(viewModel: MapViewModel = viewModel()) {
 
         Surface(
             modifier = Modifier
-                .align(Alignment.TopStart)
-                .padding(12.dp),
-            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
-            shape = MaterialTheme.shapes.medium
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 80.dp, start = 12.dp, end = 12.dp),
+            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.85f),
+            shape = MaterialTheme.shapes.medium,
+            shadowElevation = 4.dp
         ) {
             Column(modifier = Modifier.padding(12.dp)) {
-                Text("Boundary & zone map", style = MaterialTheme.typography.titleLarge)
+                Text("Map Info", style = MaterialTheme.typography.titleMedium)
                 Text(
-                    "Depth shading is bundled and works offline. Base map tiles still need a " +
-                        "pre-downloaded pack via \"Before You Sail\" sync before use at sea.",
-                    style = MaterialTheme.typography.bodyLarge
+                    "Offline depth shading active. Ensure base tiles are synced for offshore use.",
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
         }

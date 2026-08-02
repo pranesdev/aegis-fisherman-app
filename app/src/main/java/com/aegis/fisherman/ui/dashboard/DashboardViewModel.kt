@@ -1,7 +1,6 @@
 package com.aegis.fisherman.ui.dashboard
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.aegis.fisherman.AegisServices
 import com.aegis.fisherman.data.model.BleConnectionState
 import com.aegis.fisherman.data.model.BoatPosition
@@ -30,11 +29,9 @@ class DashboardViewModel : ViewModel() {
         tripStarted = false
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        // Deliberately NOT disconnecting here - the BLE link and trip logging should keep
-        // running in the background/foreground service even if the Dashboard screen isn't
-        // visible. Wire a foreground Service around BoatRepository before shipping so the
-        // connection survives the app being backgrounded during a real trip.
-    }
+    // Note: We deliberately do NOT disconnect from the boat repository in onCleared().
+    // The BLE link and trip logging should keep running in the background/foreground service
+    // even if the Dashboard screen isn't visible.
+    // TODO: Wire a foreground Service around BoatRepository before shipping so the
+    // connection survives the app being backgrounded during a real trip.
 }

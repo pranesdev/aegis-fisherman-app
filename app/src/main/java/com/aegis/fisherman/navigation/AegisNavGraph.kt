@@ -59,7 +59,7 @@ fun AegisNavGraph() {
     val navController = rememberNavController()
 
     Scaffold(
-        containerColor = Color.Transparent, // Let the background gradient show through
+        containerColor = Color.Transparent,
         topBar = {
             TopAppBar(
                 title = { 
@@ -68,22 +68,24 @@ fun AegisNavGraph() {
                             modifier = Modifier
                                 .padding(end = 12.dp)
                                 .size(32.dp)
-                                .background(MaterialTheme.colorScheme.primary, androidx.compose.foundation.shape.CircleShape),
+                                .background(Color.White.copy(alpha = 0.2f), androidx.compose.foundation.shape.CircleShape),
                             contentAlignment = androidx.compose.ui.Alignment.Center
                         ) {
-                            Text("A", color = MaterialTheme.colorScheme.onPrimary, style = MaterialTheme.typography.titleMedium)
+                            Text("A", color = Color.White, style = MaterialTheme.typography.titleMedium)
                         }
-                        Text("AEGIS Fisherman", style = MaterialTheme.typography.titleLarge)
+                        Text("AEGIS Fisherman", color = Color.White, style = MaterialTheme.typography.titleLarge)
                     }
                 },
                 colors = androidx.compose.material3.TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Transparent,
-                    titleContentColor = MaterialTheme.colorScheme.primary
+                    containerColor = Color.White.copy(alpha = 0.05f),
+                    titleContentColor = Color.White
                 )
             )
         },
         bottomBar = {
-            NavigationBar(containerColor = Color.Black.copy(alpha = 0.3f)) {
+            NavigationBar(
+                containerColor = Color.White.copy(alpha = 0.05f)
+            ) {
                 val backStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = backStackEntry?.destination
 
@@ -91,10 +93,10 @@ fun AegisNavGraph() {
                     NavigationBarItem(
                         selected = currentDestination?.hierarchy?.any { it.route == destination.route } == true,
                         colors = androidx.compose.material3.NavigationBarItemDefaults.colors(
-                            selectedIconColor = MaterialTheme.colorScheme.primary,
-                            selectedTextColor = MaterialTheme.colorScheme.primary,
-                            unselectedIconColor = Color.White.copy(alpha = 0.5f),
-                            unselectedTextColor = Color.White.copy(alpha = 0.5f),
+                            selectedIconColor = Color.White,
+                            selectedTextColor = Color.White,
+                            unselectedIconColor = Color.White.copy(alpha = 0.4f),
+                            unselectedTextColor = Color.White.copy(alpha = 0.4f),
                             indicatorColor = Color.White.copy(alpha = 0.1f)
                         ),
                         onClick = {
@@ -111,23 +113,24 @@ fun AegisNavGraph() {
             }
         },
     ) { innerPadding ->
-        androidx.compose.foundation.layout.Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(com.aegis.fisherman.ui.theme.AegisColors.BackgroundGradient)
-                .padding(innerPadding)
-        ) {
-            NavHost(
-                navController = navController,
-                startDestination = Destination.Dashboard.route
+        com.aegis.fisherman.ui.components.WavesBackground {
+            androidx.compose.foundation.layout.Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
             ) {
-                composable(Destination.Dashboard.route) { DashboardScreen() }
-                composable(Destination.Map.route) { MapScreen() }
-                composable(Destination.Weather.route) { WeatherScreen() }
-                composable(Destination.Guide.route) { GuideScreen() }
-                composable(Destination.Sync.route) { SyncScreen() }
-                composable(Destination.History.route) { TripHistoryScreen() }
-                composable(Destination.Settings.route) { SettingsScreen() }
+                NavHost(
+                    navController = navController,
+                    startDestination = Destination.Dashboard.route
+                ) {
+                    composable(Destination.Dashboard.route) { DashboardScreen() }
+                    composable(Destination.Map.route) { MapScreen() }
+                    composable(Destination.Weather.route) { WeatherScreen() }
+                    composable(Destination.Guide.route) { GuideScreen() }
+                    composable(Destination.Sync.route) { SyncScreen() }
+                    composable(Destination.History.route) { TripHistoryScreen() }
+                    composable(Destination.Settings.route) { SettingsScreen() }
+                }
             }
         }
     }

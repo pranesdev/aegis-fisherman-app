@@ -59,3 +59,15 @@ interface RestrictedZoneDao {
     @Query("SELECT COUNT(*) FROM restricted_zone")
     suspend fun count(): Int
 }
+
+@Dao
+interface SavedSpotDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(spot: SavedSpotEntity)
+
+    @Query("SELECT * FROM saved_spots ORDER BY timestampEpochSec DESC")
+    fun getAll(): Flow<List<SavedSpotEntity>>
+
+    @Query("DELETE FROM saved_spots WHERE id = :id")
+    suspend fun delete(id: Long)
+}

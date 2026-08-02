@@ -32,6 +32,25 @@ class OfflineDataRepository(
     fun observeRestrictedZones(): Flow<List<RestrictedZone>> =
         db.restrictedZoneDao().getAll().map { list -> list.map { it.toModel() } }
 
+    fun observeSavedSpots(): Flow<List<com.aegis.fisherman.data.db.SavedSpotEntity>> =
+        db.savedSpotDao().getAll()
+
+    suspend fun saveSpot(name: String, lat: Double, lng: Double, depth: Double?) = withContext(Dispatchers.IO) {
+        db.savedSpotDao().insert(
+            com.aegis.fisherman.data.db.SavedSpotEntity(
+                name = name,
+                latitude = lat,
+                longitude = lng,
+                depthMeters = depth,
+                timestampEpochSec = java.time.Instant.now().epochSecond
+            )
+        )
+    }
+
+    suspend fun deleteSpot(id: Long) = withContext(Dispatchers.IO) {
+        db.savedSpotDao().delete(id)
+    }
+
     /** Seeds the local DB from bundled assets on first run. Safe to call every launch. */
     suspend fun seedIfEmpty() = withContext(Dispatchers.IO) {
         if (db.fishSpeciesDao().count() == 0) {

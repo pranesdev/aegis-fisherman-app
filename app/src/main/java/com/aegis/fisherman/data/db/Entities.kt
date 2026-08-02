@@ -50,3 +50,13 @@ data class RestrictedZoneEntity(
     val description: String,
     val polygonJson: String // list of [lat,lng] pairs, serialized - see GeoUtils for (de)serialization
 )
+
+@Entity(tableName = "saved_spots")
+data class SavedSpotEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val name: String,
+    val latitude: Double,
+    val longitude: Double,
+    val depthMeters: Double?,
+    val timestampEpochSec: Long
+)

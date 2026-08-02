@@ -1,5 +1,6 @@
 package com.aegis.fisherman.ui.history
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,42 +26,56 @@ fun TripHistoryScreen(viewModel: TripHistoryViewModel = viewModel()) {
     val selectedTripId by viewModel.selectedTripId.collectAsState()
     val entries by viewModel.selectedTripEntries.collectAsState()
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Text("Trip log", style = MaterialTheme.typography.headlineMedium)
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Text("TRIP LOG", style = MaterialTheme.typography.titleLarge, color = androidx.compose.ui.graphics.Color.White)
         Text(
-            "On-phone record of every reading from the boat unit, one entry per trip - a " +
-                "convenience mirror of the boat unit's own SD-card blackbox, not a replacement for it.",
-            style = MaterialTheme.typography.bodyLarge
+            "On-phone record of every reading from the boat unit.",
+            style = MaterialTheme.typography.bodyLarge,
+            color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.6f)
         )
 
         if (selectedTripId == null) {
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 items(tripIds) { tripId ->
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = { viewModel.selectTrip(tripId) }
+                    com.aegis.fisherman.ui.components.GlassCard(
+                        modifier = Modifier.fillMaxWidth().clickable { viewModel.selectTrip(tripId) }
                     ) {
-                        Text(tripId, modifier = Modifier.padding(16.dp), style = MaterialTheme.typography.bodyLarge)
+                        Text(
+                            text = "Trip: $tripId", 
+                            modifier = Modifier.padding(8.dp), 
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = androidx.compose.ui.graphics.Color.White
+                        )
                     }
                 }
             }
         } else {
-            Text("Trip: $selectedTripId", style = MaterialTheme.typography.titleLarge)
+            Text("Selected: $selectedTripId", style = MaterialTheme.typography.titleLarge, color = androidx.compose.ui.graphics.Color.White)
             LazyColumn(
                 contentPadding = PaddingValues(vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(6.dp)
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 items(entries) { entry ->
-                    Card(modifier = Modifier.fillMaxWidth()) {
-                        Column(modifier = Modifier.padding(12.dp)) {
+                    com.aegis.fisherman.ui.components.GlassCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        alpha = 0.15f
+                    ) {
+                        Column(modifier = Modifier.padding(4.dp)) {
                             Text(
-                                "${entry.latitude}, ${entry.longitude}  ·  ${entry.zone}",
+                                text = "${entry.latitude}, ${entry.longitude}",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = androidx.compose.ui.graphics.Color.White
+                            )
+                            Text(
+                                text = entry.zone,
+                                style = MaterialTheme.typography.labelLarge,
                                 color = zoneColor(ZoneStatus.fromString(entry.zone))
                             )
                             Text(
-                                "dist: ${entry.distanceToBoundaryMeters ?: "--"} m  ·  " +
-                                    "speed: ${entry.speedKnots ?: "--"} kn  ·  ts: ${entry.timestampEpochSec}",
-                                style = MaterialTheme.typography.bodyLarge
+                                text = "dist: ${entry.distanceToBoundaryMeters ?: "--"} m  ·  " +
+                                    "speed: ${entry.speedKnots ?: "--"} kn",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.6f)
                             )
                         }
                     }

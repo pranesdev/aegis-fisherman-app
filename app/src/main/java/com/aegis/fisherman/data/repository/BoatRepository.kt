@@ -9,6 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.format.DateTimeFormatter
@@ -24,18 +25,70 @@ class BoatRepository(
     private val ble: BoatBleManager,
     private val db: AegisDatabase
 ) {
+    private val _demoMode = kotlinx.coroutines.flow.MutableStateFlow(false)
+    val demoMode: StateFlow<Boolean> = _demoMode
+
+    private val _simulatedPosition = kotlinx.coroutines.flow.MutableStateFlow<BoatPosition?>(null)
+
     val connectionState: StateFlow<BleConnectionState> = ble.connectionState
-    val latestPosition: StateFlow<BoatPosition?> = ble.latestPosition
+    
+    val latestPosition: StateFlow<BoatPosition?> = kotlinx.coroutines.flow.combine(
+        ble.latestPosition,
+        _simulatedPosition,
+        _demoMode
+    ) { real, simulated, isDemo ->
+        if (isDemo) simulated else real
+    }.stateIn(
+        CoroutineScope(Dispatchers.Main), 
+        kotlinx.coroutines.flow.SharingStarted.Eagerly, 
+        null
+    )
 
     private var currentTripId: String? = null
     private val scope = CoroutineScope(Dispatchers.IO)
+    private var simulationJob: kotlinx.coroutines.Job? = null
 
     init {
         scope.launch {
-            ble.latestPosition.collect { position ->
+            latestPosition.collect { position ->
                 if (position != null) {
                     logReading(position)
                 }
+            }
+        }
+    }
+
+    fun toggleDemoMode(enabled: Boolean) {
+        _demoMode.value = enabled
+        if (enabled) {
+            startSimulation()
+        } else {
+            simulationJob?.cancel()
+            _simulatedPosition.value = null
+        }
+    }
+
+    private fun startSimulation() {
+        simulationJob?.cancel()
+        simulationJob = scope.launch {
+            val route = listOf(
+                // Near shore (Safe)
+                BoatPosition(9.10, 79.40, com.aegis.fisherman.data.model.ZoneStatus.SAFE, 1200.0, 5.0, Instant.now().epochSecond),
+                BoatPosition(9.08, 79.42, com.aegis.fisherman.data.model.ZoneStatus.SAFE, 800.0, 8.5, Instant.now().epochSecond),
+                // Approaching boundary (Warning)
+                BoatPosition(9.05, 79.45, com.aegis.fisherman.data.model.ZoneStatus.WARNING, 450.0, 12.0, Instant.now().epochSecond),
+                BoatPosition(9.02, 79.48, com.aegis.fisherman.data.model.ZoneStatus.WARNING, 150.0, 10.0, Instant.now().epochSecond),
+                // Crossed boundary (Danger)
+                BoatPosition(8.98, 79.52, com.aegis.fisherman.data.model.ZoneStatus.DANGER, 0.0, 14.5, Instant.now().epochSecond),
+                BoatPosition(8.95, 79.55, com.aegis.fisherman.data.model.ZoneStatus.DANGER, 0.0, 15.0, Instant.now().epochSecond)
+            )
+            
+            var index = 0
+            while (true) {
+                val basePos = route[index % route.size]
+                _simulatedPosition.value = basePos.copy(timestampEpochSec = Instant.now().epochSecond)
+                kotlinx.coroutines.delay(5000)
+                index++
             }
         }
     }

@@ -12,6 +12,9 @@ class DashboardViewModel : ViewModel() {
 
     val connectionState: StateFlow<BleConnectionState> = repository.connectionState
     val latestPosition: StateFlow<BoatPosition?> = repository.latestPosition
+    val demoMode: StateFlow<Boolean> = repository.demoMode
+
+    fun toggleDemoMode(enabled: Boolean) = repository.toggleDemoMode(enabled)
 
     private var tripStarted = false
 

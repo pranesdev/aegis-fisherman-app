@@ -20,8 +20,8 @@ object AegisColors {
     val Foam = Color(0xFFF2F7FA)
     
     // Glass Palette
-    val GlassWhite = Color.White.copy(alpha = 0.15f)
-    val GlassBorder = Color.White.copy(alpha = 0.25f)
+    val GlassWhite = Color.White.copy(alpha = 0.20f)
+    val GlassBorder = Color.White.copy(alpha = 0.35f)
     
     // Status Glows (Vibrant for visibility through glass)
     val ZoneSafe = Color(0xFF00E676)
@@ -52,7 +52,7 @@ private val AegisTypography = Typography(
     headlineLarge = TextStyle(fontWeight = FontWeight.Bold, fontSize = 32.sp),
     headlineMedium = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp),
     titleLarge = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
-    bodyLarge = TextStyle(fontWeight = FontWeight.Medium, fontSize = 16.sp),
+    bodyLarge = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp), // Higher weight for readability
     labelLarge = TextStyle(fontWeight = FontWeight.Bold, fontSize = 12.sp, letterSpacing = 1.sp)
 )
 

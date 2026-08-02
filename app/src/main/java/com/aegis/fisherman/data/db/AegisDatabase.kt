@@ -10,9 +10,10 @@ import androidx.room.RoomDatabase
         TripLogEntity::class,
         WeatherCacheEntity::class,
         FishSpeciesEntity::class,
-        RestrictedZoneEntity::class
+        RestrictedZoneEntity::class,
+        SavedSpotEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AegisDatabase : RoomDatabase() {
@@ -20,6 +21,7 @@ abstract class AegisDatabase : RoomDatabase() {
     abstract fun weatherCacheDao(): WeatherCacheDao
     abstract fun fishSpeciesDao(): FishSpeciesDao
     abstract fun restrictedZoneDao(): RestrictedZoneDao
+    abstract fun savedSpotDao(): SavedSpotDao
 
     companion object {
         @Volatile private var instance: AegisDatabase? = null
@@ -30,7 +32,9 @@ abstract class AegisDatabase : RoomDatabase() {
                     context.applicationContext,
                     AegisDatabase::class.java,
                     "aegis.db"
-                ).build().also { instance = it }
+                )
+                .fallbackToDestructiveMigration() // scaffold only: wipe on schema change
+                .build().also { instance = it }
             }
     }
 }

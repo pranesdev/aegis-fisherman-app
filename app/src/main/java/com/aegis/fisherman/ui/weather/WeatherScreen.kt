@@ -3,10 +3,12 @@ package com.aegis.fisherman.ui.weather
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.TrendingFlat
 import androidx.compose.material.icons.filled.Air
@@ -15,6 +17,7 @@ import androidx.compose.material.icons.filled.Umbrella
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material.icons.filled.Waves
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -114,11 +117,11 @@ fun WeatherScreen(viewModel: WeatherViewModel = viewModel()) {
             com.aegis.fisherman.ui.components.GlassCard(
                 modifier = Modifier.fillMaxWidth(),
                 glowColor = com.aegis.fisherman.ui.theme.AegisColors.ZoneDanger,
-                alpha = 0.3f
+                alpha = 0.35f
             ) {
                 Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                     Icon(Icons.Default.Warning, contentDescription = null, tint = com.aegis.fisherman.ui.theme.AegisColors.ZoneDanger)
-                    androidx.compose.foundation.layout.Spacer(Modifier.size(12.dp))
+                    androidx.compose.foundation.layout.Spacer(Modifier.width(12.dp))
                     Text(it, style = MaterialTheme.typography.bodyLarge, color = Color.White)
                 }
             }

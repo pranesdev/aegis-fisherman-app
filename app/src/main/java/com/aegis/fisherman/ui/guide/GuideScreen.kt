@@ -3,10 +3,12 @@ package com.aegis.fisherman.ui.guide
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -87,7 +89,7 @@ private fun FishSpeciesList(species: List<FishSpecies>) {
                     color = Color.White.copy(alpha = 0.6f)
                 )
                 
-                HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp), thickness = 0.5.dp, color = Color.White.copy(alpha = 0.2f))
+                HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp), thickness = 0.5.dp, color = Color.White.copy(alpha = 0.1f))
                 
                 Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                     Column {
@@ -111,7 +113,7 @@ private fun FishSpeciesList(species: List<FishSpecies>) {
                             verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
                         ) {
                             Icon(Icons.Default.Warning, contentDescription = null, tint = com.aegis.fisherman.ui.theme.AegisColors.ZoneDanger, modifier = Modifier.size(16.dp))
-                            androidx.compose.foundation.layout.Spacer(Modifier.size(8.dp))
+                            androidx.compose.foundation.layout.Spacer(Modifier.width(8.dp))
                             Text(
                                 "RESTRICTED SPECIES",
                                 color = com.aegis.fisherman.ui.theme.AegisColors.ZoneDanger,
@@ -140,7 +142,7 @@ private fun RestrictedZonesList(zones: List<RestrictedZone>) {
             com.aegis.fisherman.ui.components.GlassCard(modifier = Modifier.fillMaxWidth()) {
                 Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                     Icon(Icons.Default.Info, contentDescription = null, tint = com.aegis.fisherman.ui.theme.AegisColors.ZoneSafe)
-                    androidx.compose.foundation.layout.Spacer(Modifier.size(8.dp))
+                    androidx.compose.foundation.layout.Spacer(Modifier.width(8.dp))
                     Text(
                         text = zone.name, 
                         style = MaterialTheme.typography.titleLarge,
